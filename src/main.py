@@ -15,6 +15,8 @@ def main(page: ft.Page):
     # page.add(texto2)
     # pass
 
+    
+
     def cambiar_texto(e):
         texto2.value = "¡Suscríbete para más Tutoriales!"
         page.update()
