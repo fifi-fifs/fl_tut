@@ -7,61 +7,41 @@ import flet as ft
 
 def main(page: ft.Page):
     page.bgcolor = ft.Colors.BLUE_GREY_800
-    page.title = "Mi app mejorada con filas y columnas"
-    
-    
-    texto1 = ft.Text(value="Texto 1", size=24, color=ft.Colors.WHITE)
-    texto2 = ft.Text(value="Texto 2", size=24, color=ft.Colors.WHITE)
-    texto3 = ft.Text(value="Texto 3", size=24, color=ft.Colors.WHITE)
-    # texto2 = ft.Text(value="Texto 2", size=18, color=ft.Colors.WHITE)
+    page.title = "Mi Lista de Tareas"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    fila_textos = ft.Row(controls=[texto1,texto2,texto3],alignment=ft.MainAxisAlignment.CENTER, spacing=50)
-
-    boton1 = ft.FilledButton(text="Botón 1")
-    boton2 = ft.FilledButton(text="Botón 2")
-    boton3 = ft.FilledButton(text="Botón 3")
-
-    fila_botones = ft.Row(controls=[boton1, boton2, boton3],alignment=ft.MainAxisAlignment.CENTER,spacing=50)
+    titulo = ft.Text(value="Mi Lista de Tareas con Flet",size=30, weight=ft.FontWeight.BOLD)
 
 
-    textos_columna1 = [
-        ft.Text(value="Columna 1 - Fila 1", size=18, color=ft.Colors.WHITE),
-        ft.Text(value="Columna 1 - Fila 2", size=18, color=ft.Colors.WHITE),
-        ft.Text(value="Columna 1 - Fila 3", size=18, color=ft.Colors.WHITE)
-    ]   
+    def agregar_tarea(c):  
+        if campo_tarea.value:  
+            tarea = ft.ListTile(title=ft.Text(campo_tarea.value), leading=ft.Checkbox(on_change=seleccionar_tarea))  
+            tareas.append(tarea)
+            campo_tarea.value=""
+            actualizar_lista()
 
-    columna_texto1 = ft.Column(
-        controls=textos_columna1
-    )
+    def seleccionar_tarea(e):  
+        seleccionadas = [t.title.value for t in tareas if t.leading.value]  
+        tareas_seleccionadas.value = "Tareas seleccionadas: " + ", ".join(seleccionadas)  
+        page.update()  
 
-    textos_columna2 = [
-        ft.Text(value="Columna 2 - Fila 1", size=18, color=ft.Colors.WHITE),
-        ft.Text(value="Columna 2 - Fila 2", size=18, color=ft.Colors.WHITE),
-        ft.Text(value="Columna 2 - Fila 3", size=18, color=ft.Colors.WHITE)
-    ]   
-
-    columna_texto2 = ft.Column(
-        controls=textos_columna2
-        # controls=textos_columna2, alignment=ft.MainAxisAlignment.CENTER,horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=50
-    )
-
-    page.add(fila_textos, fila_botones)
-
-    fila_columns = ft.Row(
-        controls=[columna_texto1, columna_texto2], alignment=ft.MainAxisAlignment.CENTER,spacing=150,
-    )
-    page.add(fila_columns)
+    def actualizar_lista():
+        lista_tareas.controls.clear()
+        lista_tareas.controls.extend(tareas)
+        page.update()
 
 
+    campo_tarea = ft.TextField(hint_text="Escribe una nueva tarea")
+    boton_agregar = ft.FilledButton(text="Agregar_tarea", on_click=agregar_tarea)
+
+    tareas = []
+
+    tareas_seleccionadas = ft.Text("", size=20, weight=ft.FontWeight.BOLD)
+
+    lista_tareas = ft.ListView(expand=1, spacing=3)
 
 
-    # page.add(columna_texto1)
-    # page.add(fila_textos, fila_botones, columna_texto1, columna_texto2)
-
-
-
-    # page.add(texto1,texto2,texto3)
-
+    page.add(titulo, campo_tarea, boton_agregar,lista_tareas, tareas_seleccionadas)
 
 
 if __name__ == "__main__":
